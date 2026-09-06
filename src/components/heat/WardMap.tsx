@@ -123,15 +123,14 @@ export function WardMap({
             const w = byId.get(id);
             const dimmed = visibleWards ? !visibleWards.has(id) : false;
             const isSel = selectedWard === id;
-            const pts = (f.geometry.coordinates[0] ?? [])
-              .map((c) => project(c).join(","))
-              .join(" ");
-            const c = project(
-              (f.geometry.coordinates[0] ?? []).reduce(
-                (acc, p) => [acc[0] + p[0] / (f.geometry.coordinates[0]!.length - 1), acc[1] + p[1] / (f.geometry.coordinates[0]!.length - 1)] as [number, number],
-                [0, 0] as [number, number],
-              ),
-            );
+            const ring = f.geometry.coordinates[0] ?? [];
+            const proj = ring.slice(0, -1).map((coord) => project(coord));
+            const pts = proj.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
+            const c: [number, number] = [
+              Number((proj.reduce((a, p) => a + p[0], 0) / proj.length).toFixed(2)),
+              Number((proj.reduce((a, p) => a + p[1], 0) / proj.length).toFixed(2)),
+            ];
+
             return (
               <g key={id}>
                 <polygon
