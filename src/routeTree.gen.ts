@@ -15,6 +15,7 @@ import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as ExplainabilityRouteImport } from './routes/explainability'
 import { Route as ForecastRouteImport } from './routes/forecast'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as SystemRouteImport } from './routes/system'
 import { Route as WardsRouteImport } from './routes/wards'
 
 const IndexRoute = IndexRouteImport.update({
@@ -47,6 +48,11 @@ const MapRoute = MapRouteImport.update({
   path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SystemRoute = SystemRouteImport.update({
+  id: '/system',
+  path: '/system',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WardsRoute = WardsRouteImport.update({
   id: '/wards',
   path: '/wards',
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/explainability': typeof ExplainabilityRoute
   '/forecast': typeof ForecastRoute
   '/map': typeof MapRoute
+  '/system': typeof SystemRoute
   '/wards': typeof WardsRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/explainability': typeof ExplainabilityRoute
   '/forecast': typeof ForecastRoute
   '/map': typeof MapRoute
+  '/system': typeof SystemRoute
   '/wards': typeof WardsRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/explainability': typeof ExplainabilityRoute
   '/forecast': typeof ForecastRoute
   '/map': typeof MapRoute
+  '/system': typeof SystemRoute
   '/wards': typeof WardsRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/explainability'
     | '/forecast'
     | '/map'
+    | '/system'
     | '/wards'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/explainability'
     | '/forecast'
     | '/map'
+    | '/system'
     | '/wards'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/explainability'
     | '/forecast'
     | '/map'
+    | '/system'
     | '/wards'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   ExplainabilityRoute: typeof ExplainabilityRoute
   ForecastRoute: typeof ForecastRoute
   MapRoute: typeof MapRoute
+  SystemRoute: typeof SystemRoute
   WardsRoute: typeof WardsRoute
 }
 
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/system': {
+      id: '/system'
+      path: '/system'
+      fullPath: '/system'
+      preLoaderRoute: typeof SystemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wards': {
       id: '/wards'
       path: '/wards'
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExplainabilityRoute: ExplainabilityRoute,
   ForecastRoute: ForecastRoute,
   MapRoute: MapRoute,
+  SystemRoute: SystemRoute,
   WardsRoute: WardsRoute,
 }
 export const routeTree = rootRouteImport
