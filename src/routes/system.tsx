@@ -24,7 +24,7 @@ export const Route = createFileRoute("/system")({
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(systemStatusQuery),
-  component: SystemStatus;
+  component: SystemStatus,
 });
 
 function SystemStatus() {
