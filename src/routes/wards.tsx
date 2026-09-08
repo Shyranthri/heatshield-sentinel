@@ -28,7 +28,12 @@ export const Route = createFileRoute("/wards")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(wardsQuery),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(wardsQuery),
+      context.queryClient.ensureQueryData(geoQuery),
+    ]);
+  },
   component: WardIntelligence,
 });
 
@@ -36,6 +41,7 @@ function WardIntelligence() {
   const navigate = useNavigate({ from: "/wards" });
   const { ward: wardParam } = Route.useSearch();
   const { data: wards } = useSuspenseQuery(wardsQuery);
+  const { data: geo } = useSuspenseQuery(geoQuery);
 
   const ward = wards.find((w) => w.ward_id === (wardParam ?? 34)) ?? wards[0]!;
   const setWard = (id: number) => navigate({ search: { ward: id } });
