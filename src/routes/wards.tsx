@@ -5,7 +5,8 @@ import { Metric, PageHeader, Panel } from "@/components/heat/Panel";
 import { RiskBadge, TrendTag } from "@/components/heat/RiskBadge";
 import { ShapBars } from "@/components/heat/ShapBars";
 import { AdvisoryCard } from "@/components/heat/AdvisoryCard";
-import { wardsQuery } from "@/services/queries";
+import { MapLegend, WardMap } from "@/components/heat/WardMap";
+import { geoQuery, wardsQuery } from "@/services/queries";
 import { riskText } from "@/lib/risk";
 
 const searchSchema = z.object({ ward: z.number().int().min(1).max(72).optional() });
@@ -27,7 +28,12 @@ export const Route = createFileRoute("/wards")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(wardsQuery),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(wardsQuery),
+      context.queryClient.ensureQueryData(geoQuery),
+    ]);
+  },
   component: WardIntelligence,
 });
 
@@ -35,6 +41,7 @@ function WardIntelligence() {
   const navigate = useNavigate({ from: "/wards" });
   const { ward: wardParam } = Route.useSearch();
   const { data: wards } = useSuspenseQuery(wardsQuery);
+  const { data: geo } = useSuspenseQuery(geoQuery);
 
   const ward = wards.find((w) => w.ward_id === (wardParam ?? 34)) ?? wards[0]!;
   const setWard = (id: number) => navigate({ search: { ward: id } });
@@ -95,6 +102,24 @@ function WardIntelligence() {
           />
         </div>
       </Panel>
+
+      <Panel
+        title="Ward GIS Map"
+        subtitle="Ward boundaries coloured by heat risk — click or hover a ward to load its details above"
+        action={<MapLegend />}
+      >
+        <WardMap
+          geo={geo}
+          wards={wards}
+          metric="risk"
+          selectedWard={ward.ward_id}
+          onSelect={setWard}
+          height={420}
+          showControls
+        />
+      </Panel>
+
+
 
       <div className="grid gap-4 xl:grid-cols-[1fr_1fr]">
         <Panel title="5-Day Forecast" subtitle="XGBoost WBGT forecast and resulting risk level">
