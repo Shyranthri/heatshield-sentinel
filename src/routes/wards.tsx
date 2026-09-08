@@ -5,7 +5,8 @@ import { Metric, PageHeader, Panel } from "@/components/heat/Panel";
 import { RiskBadge, TrendTag } from "@/components/heat/RiskBadge";
 import { ShapBars } from "@/components/heat/ShapBars";
 import { AdvisoryCard } from "@/components/heat/AdvisoryCard";
-import { wardsQuery } from "@/services/queries";
+import { MapLegend, WardMap } from "@/components/heat/WardMap";
+import { geoQuery, wardsQuery } from "@/services/queries";
 import { riskText } from "@/lib/risk";
 
 const searchSchema = z.object({ ward: z.number().int().min(1).max(72).optional() });
