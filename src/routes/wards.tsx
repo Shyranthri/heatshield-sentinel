@@ -103,6 +103,24 @@ function WardIntelligence() {
         </div>
       </Panel>
 
+      <Panel
+        title="Ward GIS Map"
+        subtitle="Ward boundaries coloured by heat risk — click or hover a ward to load its details above"
+        action={<MapLegend />}
+      >
+        <WardMap
+          geo={geo}
+          wards={wards}
+          metric="risk"
+          selectedWard={ward.ward_id}
+          onSelect={setWard}
+          height={420}
+          showControls
+        />
+      </Panel>
+
+
+
       <div className="grid gap-4 xl:grid-cols-[1fr_1fr]">
         <Panel title="5-Day Forecast" subtitle="XGBoost WBGT forecast and resulting risk level">
           <div className="grid gap-3 sm:grid-cols-3">
